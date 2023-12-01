@@ -19,9 +19,12 @@ app.get('/',(req, res) => {
 })
 
 const userRouter = require('./routers/userRouter.js');
+const adminRouter = require('./routers/adminRouter.js');
+const tvShowRouter= require('./routers/tvShowRouter.js');
 
 app.use('/Users',userRouter);
-
+app.use('/Admins',adminRouter);
+app.use('/tvShow',tvShowRouter);
 
 
 

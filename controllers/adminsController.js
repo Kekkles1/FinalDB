@@ -2,12 +2,12 @@ const {getConnection} = require("../config/connection");
 
 module.exports={
 
-    getAllUsers: async function  (req, res){
+    getAllAdmins: async function  (req, res){
         let connection ;
         try {
           console.log("hitttt--<<<<<<")
             connection = await getConnection();
-            const table = await connection.execute("SELECT * FROM users");
+            const table = await connection.execute("SELECT * FROM admin");
             // console.log(table.rows);
             res.status(200).send(table);
           } catch (error) {
@@ -25,12 +25,12 @@ module.exports={
         } 
         // return table;
     },
-    AddNewUser: async function (req, res){
+    AddNewAdmin: async function (req, res){
       let connection ;
       try {
           connection = await getConnection();
-          const query = `INSERT INTO users (user_id,username,password) VALUES (:1, :2, :3)`;
-          const binds = [req.body.user_id, req.body.username, req.body.password];
+          const query = `INSERT INTO admin (admin_id,username,password) VALUES (:1, :2, :3)`;
+          const binds = [req.body.admin_id, req.body.username, req.body.password];
           const options = {
             autoCommit: true, 
           };
