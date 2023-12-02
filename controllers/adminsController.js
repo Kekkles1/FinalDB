@@ -30,8 +30,8 @@ module.exports={
       let connection ;
       try {
           connection = await getConnection();
-          const query = `INSERT INTO admin (admin_id,username,password) VALUES (:1, :2, :3) `;
-          const binds = [req.body.admin_id, req.body.username, req.body.password];
+          const query = `INSERT INTO admin (username,password) VALUES (:1, :2) `;
+          const binds = [req.body.username, req.body.password];
           const options = {
             autoCommit: true, 
           };
@@ -60,8 +60,8 @@ module.exports={
     let connection ;
     try {
         connection = await getConnection();
-        const query = `INSERT INTO tv_show (tv_show_id,name,season,genre,synopsis,lang,rating) VALUES (:1, :2, :3, :4, :5, :6, :7)`;
-        const binds = [req.body.tv_show_id,req.body.name,req.body.season,req.body.genre,req.body.synopsis,req.body.lang,req.body.rating];
+        const query = `INSERT INTO tv_show (name,season,genre,synopsis,lang,rating) VALUES (:1, :2, :3, :4, :5, :6)`;
+        const binds = [req.body.name,req.body.season,req.body.genre,req.body.synopsis,req.body.lang,req.body.rating];
         const options = {
           autoCommit: true, 
         };
