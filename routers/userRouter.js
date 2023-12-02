@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.get("/", usersController.getAllUsers);
 router.post("/AddNewUser",usersController.AddNewUser);
+router.get("/GetAllTvShows",usersController.getAllTvShows);
 
 module.exports = router;

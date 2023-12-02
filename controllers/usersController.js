@@ -25,6 +25,7 @@ module.exports={
         } 
         // return table;
     },
+    
     AddNewUser: async function (req, res){
       let connection ;
       try {
@@ -36,7 +37,7 @@ module.exports={
           };
           
           await connection.execute(query,binds,options);
-          res.status(202).send("Added");
+          res.status(202).send("Added User");
       } 
       catch (error) {
           console.error('Error executing SQL query:', error);
@@ -53,5 +54,28 @@ module.exports={
             }
           }
       }
-  }
+  },
+
+  getAllTvShows: async function  (req, res){
+    let connection ;
+    try {
+      console.log("hitttt--<<<<<<")
+        connection = await getConnection();
+        const table = await connection.execute("SELECT * FROM tv_show");
+        // console.log(table.rows);
+        res.status(200).send(table);
+      } catch (error) {
+        console.error('Error executing SQL query:', error);
+        res.status(500).send('Internal Server Error');
+      } finally {
+        if (connection) {
+          try {
+            // Release the connection when done
+            await connection.close();
+          } catch (error) {
+            console.error('Error closing database connection:', error);
+          }
+        }
+    } 
+}
 }
