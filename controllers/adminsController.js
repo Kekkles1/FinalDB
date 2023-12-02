@@ -25,6 +25,7 @@ module.exports={
         } 
         // return table;
     },
+    
     AddNewAdmin: async function (req, res){
       let connection ;
       try {
@@ -53,5 +54,35 @@ module.exports={
             }
           }
       }
-  }
+  },
+
+  AddNewShow: async function (req, res){
+    let connection ;
+    try {
+        connection = await getConnection();
+        const query = `INSERT INTO tv_show (tv_show_id,name,season,genre,synopsis,lang,rating) VALUES (:1, :2, :3, :4, :5, :6, :7)`;
+        const binds = [req.body.tv_show_id,req.body.name,req.body.season,req.body.genre,req.body.synopsis,req.body.lang,req.body.rating];
+        const options = {
+          autoCommit: true, 
+        };
+        
+        await connection.execute(query,binds,options);
+        res.status(202).send("Added");
+    } 
+    catch (error) {
+        console.error('Error executing SQL query:', error);
+        res.status(500).send('Internal Server Error');
+      
+    } 
+    finally {
+        if (connection) {
+          try {
+            // Release the connection when done
+            await connection.close();
+          } catch (error) {
+            console.error('Error closing database connection:', error);
+          }
+        }
+    }
+}
 }

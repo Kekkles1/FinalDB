@@ -7,5 +7,5 @@ const router = express.Router();
 
 router.get("/", adminsController.getAllAdmins);
 router.post("/AddNewAdmin",adminsController.AddNewAdmin);
-
+router.post("/AddNewShow",adminsController.AddNewShow);
 module.exports = router;
