@@ -11,7 +11,7 @@ module.exports={
             // console.log(table.rows);
             res.status(200).send(table);
           } catch (error) {
-            console.error('Error executing SQL query:', error);
+            console.error('Error executing SQL query to get all tv shows:', error);
             res.status(500).send('Internal Server Error');
           } finally {
             if (connection) {
@@ -24,5 +24,7 @@ module.exports={
             }
         } 
         // return table;
-    }
+    },
+
+    //Populate TV shows when using dropdown
 }

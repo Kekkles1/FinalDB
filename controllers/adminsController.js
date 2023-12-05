@@ -2,6 +2,7 @@ const {getConnection} = require("../config/connection");
 
 module.exports={
 
+  //Admin can view all added admins
     getAllAdmins: async function  (req, res){
         let connection ;
         try {
@@ -11,7 +12,7 @@ module.exports={
             // console.log(table.rows);
             res.status(200).send(table);
           } catch (error) {
-            console.error('Error executing SQL query:', error);
+            console.error('Error executing SQL query to view all admins:', error);
             res.status(500).send('Internal Server Error');
           } finally {
             if (connection) {
@@ -26,6 +27,7 @@ module.exports={
         // return table;
     },
     
+    //Admin can create new admin
     AddNewAdmin: async function (req, res){
       let connection ;
       try {
@@ -40,7 +42,7 @@ module.exports={
           res.status(202).send("Added Admin");
       } 
       catch (error) {
-          console.error('Error executing SQL query:', error);
+          console.error('Error executing SQL query to add admin:', error);
           res.status(500).send('Internal Server Error');
         
       } 
@@ -56,6 +58,7 @@ module.exports={
       }
   },
 
+  //Only admins can add new tv shows
   AddNewShow: async function (req, res){
     let connection ;
     try {
@@ -70,7 +73,7 @@ module.exports={
         res.status(202).send("Added TV Show");
     } 
     catch (error) {
-        console.error('Error executing SQL query:', error);
+        console.error('Error executing SQL query to add TV Show:', error);
         res.status(500).send('Internal Server Error');
       
     } 
@@ -102,7 +105,7 @@ DeleteAdminID : async function (req, res){
     res.status(202).send("Deleted Admin");
   }
   catch(error){
-    console.log("Error executing SQL query:" ,error)
+    console.log("Error executing SQL query to delete admin:" ,error)
     res.status(500).send('Internal Server Error');
   }
   finally{
@@ -112,6 +115,63 @@ DeleteAdminID : async function (req, res){
       }
       catch(error){
         console.log("Error closing database connection:", error);
+      }
+    }
+  }
+},
+
+//Only admins can add episodes to tv shows
+AddNewEpisode: async function (req, res){
+  let connection ;
+  try {
+      connection = await getConnection();
+      const query = `INSERT INTO episodes (episode_id,title,runtime,tv_show_id) VALUES (:1, :2, :3, :4)`;
+      const binds = [req.body.episode_id,req.body.title,req.body.runtime,req.body.tv_show_id];
+      const options = {
+        autoCommit: true, 
+      };
+      
+      await connection.execute(query,binds,options);
+      res.status(202).send("Added Episode to TV Show");
+  } 
+  catch (error) {
+      console.error('Error executing SQL query to add episode:', error);
+      res.status(500).send('Internal Server Error');
+    
+  } 
+  finally {
+      if (connection) {
+        try {
+          // Release the connection when done
+          await connection.close();
+        } catch (error) {
+          console.error('Error closing database connection:', error);
+        }
+      }
+  }
+},
+
+//Admin can view all episodes for a tv_show
+getAllEpisodes: async function (req, res) {
+  let connection;
+  try {
+    connection = await getConnection();
+    const query = `SELECT * from episodes where tv_show_id=:tv_show_id`;
+    const binds = [req.params.tv_show_id];
+
+    const table = await connection.execute(query);
+    // console.log(table.rows);
+    res.status(200).send(table);
+  } catch (error) {
+    console.error("Error executing SQL query:", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    if (connection) {
+      try {
+        // Release the connection when done
+        await connection.close();
+      } catch (error) {
+        console.error("Error closing database connection:", error);
       }
     }
   }
